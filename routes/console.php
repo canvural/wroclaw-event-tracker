@@ -16,3 +16,11 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+Artisan::command('clear:fixtures', function () {
+    if (File::deleteDirectory(base_path('tests/fixtures'))) {
+        $this->comment('All fixtures cleared!');
+    } else {
+        $this->error('Can\'t clear test fixtures');
+    }
+})->describe('Clear all test fixtures.');
