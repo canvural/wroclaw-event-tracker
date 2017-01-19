@@ -3,6 +3,7 @@
 namespace App\Scrapers;
 
 use App\Models\Place;
+use App\Models\PlaceCategory;
 use App\Services\Facebook;
 use Illuminate\Support\Collection;
 
@@ -58,7 +59,7 @@ class FacebookScraper implements Scraper
      * Fetches all Facebook Places in Wroclaw from the API.
      *
      * It can take some options like limit or distance.
-     * See @getDefaultOptions method.
+     * See @getDefaultOptions method for options.
      *
      * @param array $options
      *
@@ -73,18 +74,39 @@ class FacebookScraper implements Scraper
         return collect($req->getDecodedBody());
     }
     
-    public function savePlaces(Collection $places)
+    /**
+     * Iterates through a collection and saves them to database.
+     *
+     * @param Collection $places
+     * @param callable $callback Callback to run after a place is saved.
+     */
+    public function savePlaces(Collection $places, callable $callback = null)
     {
-        $places->each(function ($place) {
-            $this->savePlace($place);
+        $places->each(function ($place) use($callback) {
+            $place = $this->savePlace($place);
+            
+            if (! is_null($callback)) {
+                $callback($place);
+            }
         });
     }
     
+    /**
+     * Save a place to database.
+     * Creates the category if not exists.
+     *
+     * @param array $place
+     * @return Place|false
+     */
     private function savePlace(array $place)
     {
-        $place = new Place($place);
+        $placeModel = new Place($this->transfromToModelArray($place));
+        $placeModel->extra_info = (array_diff_key($place, $placeModel->getAttributes()));
+    
+        /** @var PlaceCategory $category */
+        $category = PlaceCategory::firstOrCreate(['name' => $place['category']]);
         
-        $place->getAttributes();
+        return $category->places()->save($placeModel);
     }
     
     /**
@@ -102,5 +124,25 @@ class FacebookScraper implements Scraper
             'distance' => 30000,
             'fields' => join(',', $this->placeFields),
         ];
+    }
+    
+    /**
+     * Transform Facebook Place array to array that our Place model expects.
+     *
+     * @param array $place Array containing the place information fetched from Facebook API.
+     * @return array
+     */
+    private function transfromToModelArray(array $place): array
+    {
+        $place['short_description'] = $place['about'] ?? '';
+        unset($place['about']);
+    
+        $place['facebook_id'] = $place['id'] ?? null;
+        unset($place['id']);
+    
+        $place['rating'] = $place['overall_star_rating'] ?? 0;
+        unset($place['overall_star_rating']);
+        
+        return $place;
     }
 }

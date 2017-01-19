@@ -6,6 +6,7 @@ use App\Models\Place;
 use App\Models\PlaceCategory;
 use App\Scrapers\FacebookScraper;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class FacebookPlaceScraper extends Command
 {
@@ -46,39 +47,33 @@ class FacebookPlaceScraper extends Command
      */
     public function handle()
     {
-        $pb = $this->output->createProgressBar();
-        $pb->start();
+        $progressBar = $this->startProgressBar();
         
+        // Fetch places from Facebook API
         $results = collect($this->facebookScraper->fetchPlaces([
             'limit' => 2000
         ])['data']);
-        
-        $results->each(function ($test) use($pb){
-            $test['short_description'] = $test['about'] ?? '';
-            unset($test['about']);
     
-            $test['facebook_id'] = $test['id'] ?? null;
-            unset($test['id']);
-    
-            $test['rating'] = $test['overall_star_rating'] ?? 0;
-            unset($test['overall_star_rating']);
-    
-            $c = PlaceCategory::firstOrCreate(['name' => $test['category']]);
-    
-            unset($test['category']);
-    
-            $p = new Place($test);
-            $p->category_id = $c->id;
-            $p->extra_info = (array_diff_key($test, $p->getAttributes()));
-            $p->save();
-    
-            $p = null;
-            $c = null;
-            $pb->advance();
+        $this->facebookScraper->savePlaces($results, function ($place) use($progressBar) {
+            $progressBar->advance();
         });
         
-        $pb->finish();
+        $progressBar->finish();
         
         return true;
+    }
+    
+    /**
+     * Create and start a progress bar.
+     *
+     * @param int $max
+     * @return ProgressBar
+     */
+    private function startProgressBar($max = 0): ProgressBar
+    {
+        $pb = $this->output->createProgressBar($max);
+        $pb->start();
+        
+        return $pb;
     }
 }
