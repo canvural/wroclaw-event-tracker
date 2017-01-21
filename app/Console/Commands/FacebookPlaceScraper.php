@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Place;
-use App\Models\PlaceCategory;
-use App\Scrapers\FacebookScraper;
 use Illuminate\Console\Command;
+use App\Scrapers\Facebook\PlaceScraper;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class FacebookPlaceScraper extends Command
@@ -25,19 +23,20 @@ class FacebookPlaceScraper extends Command
     protected $description = 'Fetch all of the available places from the Facebook API';
     
     /**
-     * @var FacebookScraper
+     * @var PlaceScraper
      */
-    private $facebookScraper;
+    private $facebookPlaceScraper;
     
     /**
      * Create a new command instance.
      *
-     * @param FacebookScraper $facebookScraper
+     * @param PlaceScraper $facebookEventScraper
      */
-    public function __construct(FacebookScraper $facebookScraper)
+    public function __construct(PlaceScraper $facebookEventScraper)
     {
         parent::__construct();
-        $this->facebookScraper = $facebookScraper;
+        
+        $this->facebookPlaceScraper = $facebookEventScraper;
     }
 
     /**
@@ -50,11 +49,11 @@ class FacebookPlaceScraper extends Command
         $progressBar = $this->startProgressBar();
         
         // Fetch places from Facebook API
-        $results = collect($this->facebookScraper->fetchPlaces([
+        $results = collect($this->facebookPlaceScraper->fetchPlaces([
             'limit' => 2000
         ])['data']);
     
-        $this->facebookScraper->savePlaces($results, function ($place) use($progressBar) {
+        $this->facebookPlaceScraper->savePlaces($results, function ($place) use($progressBar) {
             $progressBar->advance();
         });
         

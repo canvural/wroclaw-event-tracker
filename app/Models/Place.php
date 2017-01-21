@@ -35,6 +35,16 @@ class Place extends Model
      */
     public function category()
     {
-        return $this->belongsTo(PlaceCategory::class, 'category_id');
+        return $this->belongsTo(PlaceCategory::class);
+    }
+    
+    /**
+     * Get events of this place.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 }

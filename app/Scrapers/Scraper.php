@@ -6,5 +6,5 @@ use Illuminate\Support\Collection;
 
 interface Scraper
 {
-    public function fetch(array $options) : Collection;
+    //public function fetchEvents(array $options) : Collection;
 }

@@ -9,10 +9,12 @@
         "facebook/graph-sdk": "~5.0",
         "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.4.*",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "spatie/laravel-medialibrary": "v5.x-dev"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.2",
+        "doctrine/dbal": "^2.5",
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "php-vcr/php-vcr": "^1.3",
