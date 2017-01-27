@@ -7,6 +7,7 @@ use App\Models\EventCategory;
 use App\Models\Place;
 use App\Scrapers\Facebook\EventScraper;
 use Carbon\Carbon;
+use Facebook\Exceptions\FacebookResponseException;
 use Facebook\Exceptions\FacebookServerException;
 use Illuminate\Console\Command;
 use Illuminate\Database\QueryException;
@@ -60,9 +61,7 @@ class FacebookEventScraper extends Command
     
         // Create progress with maximum of count of places.
         $progressBar = $this->startProgressBar($places->count());
-    
-        $progressBar->setFormat("%message%\n %current%/%max% [%bar%] %percent:3s%%");
-    
+        
         /** @var Place $place */
         $places->each(function ($place) use($progressBar) {
             $progressBar->setMessage("Fetching events for " . $place->name);
@@ -71,7 +70,7 @@ class FacebookEventScraper extends Command
                 $events = $this->fetchAllPlaceEvents($place)->filter(function ($value, $key) {
                     return !empty($value);
                 });
-            } catch (FacebookServerException $e) {
+            } catch (FacebookServerException|FacebookResponseException $e) {
                 \Log::error($e);
                 sleep(2);
                 return;
@@ -174,6 +173,8 @@ class FacebookEventScraper extends Command
     {
         $pb = $this->output->createProgressBar($max);
         $pb->start();
+    
+        $pb->setFormat("%message%\n %current%/%max% [%bar%] %percent:3s%%");
         
         return $pb;
     }

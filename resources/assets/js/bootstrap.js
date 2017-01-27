@@ -1,15 +1,6 @@
-
-window._ = require('lodash');
-
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
-
-window.$ = window.jQuery = require('jquery');
-
-require('bootstrap-sass');
+import Vue from 'vue';
+import axios from 'axios';
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -17,7 +8,7 @@ require('bootstrap-sass');
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = require('vue');
+window.Vue = Vue;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -25,11 +16,18 @@ window.Vue = require('vue');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+window.axios = axios;
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
+
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyAtonO5vGgoAsGOyBfPGsT3hsVyqh_twJU'
+        // libraries: 'places', //// If you need to use place input
+    }
+});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

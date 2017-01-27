@@ -36,7 +36,7 @@ class Event extends Model
      */
     public function place()
     {
-        return $this->belongsTo(Place::class);
+        return $this->belongsTo(Place::class)->select('id', 'name', 'location');
     }
     
     /**
@@ -47,5 +47,24 @@ class Event extends Model
     public function category()
     {
         return $this->belongsTo(EventCategory::class);
+    }
+    
+    /**
+     * Query scope to search event name and description
+     * for the given search query.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $searchQuery
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch($query, $searchQuery)
+    {
+        return $query->when($searchQuery, function($query) use ($searchQuery){
+            return $query->where(function ($q) use ($searchQuery) {
+                $q->where('description', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('name', 'like', '%' . $searchQuery . '%');
+            });
+        });
     }
 }
