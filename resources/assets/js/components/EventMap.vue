@@ -4,7 +4,7 @@
                 :center="{lat:51.107885, lng:17.038538}"
                 map-type-id="terrain"
                 :zoom="15"
-                style="height: 100%"
+                style="height: 500px"
         >
             <gmap-marker
                     v-for="m in markers"
@@ -96,7 +96,7 @@
 
     #event-search {
         position: absolute;
-        top: 10px;
+        top: 60px;
         right: 10px;
     }
 </style>

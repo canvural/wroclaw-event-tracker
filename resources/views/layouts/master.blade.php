@@ -15,6 +15,8 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+    @include('layouts.partials.nav')
+
     <div id="app">
         {{ $slot }}
     </div>
