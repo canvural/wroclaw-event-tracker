@@ -46,7 +46,7 @@ class FacebookEventScraper extends Command
         
         $this->facebookEventScraper = $facebookEventScraper;
         
-        \Log::useFiles(storage_path().'logs/event-scraper.log');
+        \Log::useFiles(storage_path().'/logs/event-scraper.log');
     }
     
     /**

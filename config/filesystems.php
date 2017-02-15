@@ -65,7 +65,7 @@ return [
     
         'media' => [
             'driver' => 'local',
-            'root'   => public_path().'/media',
+            'root'   => public_path('media'),
         ],
     ],
 

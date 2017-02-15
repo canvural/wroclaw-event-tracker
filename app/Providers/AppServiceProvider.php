@@ -18,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('isLoggedIn', \Auth::check());
             $view->with('user',  \Auth::user());
         });
+    
+//        \Request::macro('validate', function (...$args) {
+//            (new class { use ValidatesRequests; })->validate($this, ...$args);
+//        });
     }
 
     /**

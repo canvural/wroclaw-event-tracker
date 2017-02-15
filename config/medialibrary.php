@@ -1,9 +1,6 @@
 <?php
 
-use Spatie\MediaLibrary\ImageGenerators\FileTypes\Image;
-use Spatie\MediaLibrary\ImageGenerators\FileTypes\Pdf;
-use Spatie\MediaLibrary\ImageGenerators\FileTypes\Svg;
-use Spatie\MediaLibrary\ImageGenerators\FileTypes\Video;
+use App\Services\MediaLibraryUrlGenerator;
 
 return [
 
@@ -31,25 +28,21 @@ return [
     'media_model' => Spatie\MediaLibrary\Media::class,
 
     /*
+     * The engine that will perform the image conversions.
+     * Should be either `gd` or `imagick`
+     */
+    'image_driver' => 'gd',
+
+    /*
      * When urls to files get generated this class will be called. Leave empty
      * if your files are stored locally above the site root or on s3.
      */
-    'custom_url_generator_class' => null,
+    'custom_url_generator_class' => null, //MediaLibraryUrlGenerator::class,
 
     /*
      * The class that contains the strategy for determining a media file's path.
      */
     'custom_path_generator_class' => null,
-
-    /*
-     * List of all Image generators.
-     */
-    'imageGenerators' => [
-        Image::class,
-        Pdf::class,
-        Svg::class,
-        Video::class,
-    ],
 
     's3' => [
         /*
@@ -70,6 +63,16 @@ return [
         'extra_headers' => [
             'CacheControl' => 'max-age=604800',
         ],
+    ],
+
+    /*
+     * These generators will be used to created conversion of media files.
+     */
+    'image_generators' => [
+        Spatie\MediaLibrary\ImageGenerators\FileTypes\Image::class,
+        Spatie\MediaLibrary\ImageGenerators\FileTypes\Pdf::class,
+        Spatie\MediaLibrary\ImageGenerators\FileTypes\Svg::class,
+        Spatie\MediaLibrary\ImageGenerators\FileTypes\Video::class,
     ],
 
     /*

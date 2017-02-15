@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
-class Event extends Model
+class Event extends Model implements HasMediaConversions
 {
+    use HasMediaTrait;
+    
     protected $fillable = [
         'facebook_id',
         'description',
@@ -66,5 +70,17 @@ class Event extends Model
                     ->orWhere('name', 'like', '%' . $searchQuery . '%');
             });
         });
+    }
+    
+    /**
+     * Register the conversions that should be performed.
+     *
+     */
+    public function registerMediaConversions()
+    {
+        $this->addMediaConversion('banner')
+            ->width(208)
+            ->height(117)
+            ->queued();
     }
 }

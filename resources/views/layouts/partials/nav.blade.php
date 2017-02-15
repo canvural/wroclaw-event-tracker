@@ -2,7 +2,7 @@
     <div class="container">
         <div class="nav-left">
             <a class="nav-item">
-                <img src="http://bulma.io/images/bulma-logo.png" alt="Bulma logo">
+                Wroclaw Events
             </a>
             <a class="nav-item is-tab is-hidden-mobile is-active">Home</a>
         </div>

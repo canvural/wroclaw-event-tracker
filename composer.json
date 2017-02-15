@@ -13,7 +13,7 @@
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
-        "spatie/laravel-medialibrary": "v5.x-dev"
+        "spatie/laravel-medialibrary": "~5.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.2",
