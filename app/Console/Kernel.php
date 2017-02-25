@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         FacebookEventScraper::class,
-        FacebookPlaceScraper::class,
+        FacebookPlaceScraper::class
     ];
     
     /**

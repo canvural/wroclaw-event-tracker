@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
@@ -54,6 +55,38 @@ class Event extends Model implements HasMediaConversions
     }
     
     /**
+     * Get human readable event start time.
+     *
+     * @return mixed
+     */
+    public function getFormattedStartTimeAttribute()
+    {
+        if ($this->start_time->isToday()) {
+            return 'Today at ' . $this->start_time->format('GA');
+        }
+    
+        if ($this->start_time->isTomorrow()) {
+            return 'Tomorrow at ' . $this->start_time->format('GA');
+        }
+        
+        return $this->start_time->format('j F Y G:iA');
+    }
+    
+    /**
+     * Get human readable event end time.
+     *
+     * @return mixed
+     */
+    public function getFormattedEndTimeAttribute()
+    {
+        if ($this->end_time->isToday() || $this->end_time->isTomorrow()) {
+            return $this->end_time->format('GA');
+        }
+        
+        return $this->end_time->format('j F Y G:iA');
+    }
+    
+    /**
      * Query scope to search event name and description
      * for the given search query.
      *
@@ -79,8 +112,11 @@ class Event extends Model implements HasMediaConversions
     public function registerMediaConversions()
     {
         $this->addMediaConversion('banner')
-            ->width(208)
-            ->height(117)
-            ->queued();
+            ->width(320)
+            ->height(160);
+    
+        $this->addMediaConversion('thumbnail')
+            ->width(96)
+            ->height(96);
     }
 }

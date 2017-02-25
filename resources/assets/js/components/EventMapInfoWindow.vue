@@ -8,7 +8,7 @@
               <span @click="triggerNextEvent">Next Event &gt;</span>
             </a>
         </header>
-        <div class="card-image">
+        <div class="card-image" v-if="event.extra_info.cover">
             <figure class="image is-16by9">
                 <img :src="event.extra_info.cover.source" alt="Image">
             </figure>
@@ -16,7 +16,7 @@
         <div class="card-content">
             <div class="content">
                 <h3>
-                    <a :href="facebookEventUrl(event.facebook_id)">{{ event.name }}</a>
+                    <a :href="url(event.id)">{{ event.name }}</a>
                 </h3>
                 <br>
                 <small>{{ event.start_time }} - {{ event.end_time }}</small>
@@ -73,8 +73,8 @@
             this.createInfoWindow(this.$map);
         },
         methods: {
-            facebookEventUrl: function (id) {
-                return 'https://facebook.com/events/' + id;
+            url (id) {
+              return "/events/" + id
             },
             openInfoWindow () {
                 if(this.opened) {
@@ -133,7 +133,7 @@
         background-color: #fff;
         border-radius: 2px 2px 10px 10px;
         overflow: visible !important;
-        > div {
+        > div :first-of-type  {
             display: block !important;
               overflow: visible !important;
         }

@@ -22902,8 +22902,8 @@ var props = {
     },
 
     methods: {
-        facebookEventUrl: function facebookEventUrl(id) {
-            return 'https://facebook.com/events/' + id;
+        url: function url(id) {
+            return "/events/" + id;
         },
         openInfoWindow: function openInfoWindow() {
             if (this.opened) {
@@ -25016,7 +25016,7 @@ exports = module.exports = __webpack_require__(37)();
 
 
 // module
-exports.push([module.i, "\n.gm-style-iw {\n  width: 350px !important;\n  top: 15px !important;\n  background-color: #fff;\n  border-radius: 2px 2px 10px 10px;\n  overflow: visible !important;\n}\n.gm-style-iw > div {\n    display: block !important;\n    overflow: visible !important;\n}\n", ""]);
+exports.push([module.i, "\n.gm-style-iw {\n  width: 350px !important;\n  top: 15px !important;\n  background-color: #fff;\n  border-radius: 2px 2px 10px 10px;\n  overflow: visible !important;\n}\n.gm-style-iw > div :first-of-type {\n    display: block !important;\n    overflow: visible !important;\n}\n", ""]);
 
 // exports
 
@@ -30223,7 +30223,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.triggerNextEvent
     }
-  }, [_vm._v("Next Event >")])]) : _vm._e()]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Next Event >")])]) : _vm._e()]), _vm._v(" "), (_vm.event.extra_info.cover) ? _c('div', {
     staticClass: "card-image"
   }, [_c('figure', {
     staticClass: "image is-16by9"
@@ -30232,13 +30232,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "src": _vm.event.extra_info.cover.source,
       "alt": "Image"
     }
-  })])]), _vm._v(" "), _c('div', {
+  })])]) : _vm._e(), _vm._v(" "), _c('div', {
     staticClass: "card-content"
   }, [_c('div', {
     staticClass: "content"
   }, [_c('h3', [_c('a', {
     attrs: {
-      "href": _vm.facebookEventUrl(_vm.event.facebook_id)
+      "href": _vm.url(_vm.event.id)
     }
   }, [_vm._v(_vm._s(_vm.event.name))])]), _vm._v(" "), _c('br'), _vm._v(" "), _c('small', [_vm._v(_vm._s(_vm.event.start_time) + " - " + _vm._s(_vm.event.end_time))])])])])
 },staticRenderFns: []}
