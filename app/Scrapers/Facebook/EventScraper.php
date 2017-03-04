@@ -3,7 +3,6 @@
 namespace App\Scrapers\Facebook;
 
 use App\Models\Place;
-use App\Scrapers\FacebookScraper;
 use Illuminate\Support\Collection;
 
 class EventScraper extends FacebookScraper

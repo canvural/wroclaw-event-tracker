@@ -49,11 +49,10 @@ $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     return [
         'category_id' => null,
         'place_id' => factory(\App\Models\Place::class)->create()->id,
-        'name' => $faker->words(),
-        'description' => $faker->paragraphs(5),
+        'name' => $faker->words(3, true),
+        'description' => $faker->paragraphs(5, true),
         'end_time' => $faker->dateTime,
-        'start_time' => $faker->dateTime,
-        'extra_info' => json_encode([])
+        'start_time' => $faker->dateTime
     ];
 });
 

@@ -7,6 +7,10 @@ use Carbon\Carbon;
 
 class Event
 {
+    /**
+     * @param $searchQuery
+     * @return mixed
+     */
     public function all($searchQuery)
     {
         return EventModel::whereBetween('start_time', [
@@ -20,7 +24,7 @@ class Event
     public function weekly()
     {
         return EventModel::whereBetween('start_time', [
-            Carbon::today()->startOfWeek(),
+            Carbon::today(),
             Carbon::today()->endOfWeek()
         ])->inRandomOrder()->limit('5')->get();
     }

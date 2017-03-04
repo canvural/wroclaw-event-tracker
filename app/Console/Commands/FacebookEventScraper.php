@@ -174,7 +174,7 @@ class FacebookEventScraper extends Command
         $pb = $this->output->createProgressBar($max);
         $pb->start();
     
-        $pb->setFormat("%message%\n %current%/%max% [%bar%] %percent:3s%%");
+        $pb->setFormat("\n%message%\n %current%/%max% [%bar%] %percent:3s%%");
         
         return $pb;
     }

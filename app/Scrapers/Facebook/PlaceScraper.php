@@ -4,7 +4,6 @@ namespace App\Scrapers\Facebook;
 
 use App\Models\Place;
 use App\Models\PlaceCategory;
-use App\Scrapers\FacebookScraper;
 use Illuminate\Support\Collection;
 
 class PlaceScraper extends FacebookScraper
