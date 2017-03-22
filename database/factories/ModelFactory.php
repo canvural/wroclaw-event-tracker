@@ -33,7 +33,9 @@ $factory->define(App\Models\PlaceCategory::class, function (Faker\Generator $fak
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Models\Place::class, function (Faker\Generator $faker) {
     return [
-        'category_id' => factory(App\Models\PlaceCategory::class)->create()->id,
+        'category_id' => function () {
+            return factory(App\Models\PlaceCategory::class)->create()->id;
+        },
         'name' => $faker->company,
         'description' => $faker->paragraphs(5, true),
         'short_description' => $faker->paragraphs(1, true),
@@ -48,7 +50,9 @@ $factory->define(App\Models\Place::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     return [
         'category_id' => null,
-        'place_id' => factory(\App\Models\Place::class)->create()->id,
+        'place_id' => function () {
+            return factory(\App\Models\Place::class)->create()->id;
+        },
         'name' => $faker->words(3, true),
         'description' => $faker->paragraphs(5, true),
         'end_time' => $faker->dateTime,
