@@ -31,7 +31,7 @@ class FacebookEventScraper extends Command
     protected $description = 'Scrapes events from the all available websites and APIs';
     
     /**
-     * @var FacebookEventScraper
+     * @var EventScraper
      */
     private $facebookEventScraper;
     
@@ -56,6 +56,16 @@ class FacebookEventScraper extends Command
      */
     public function handle()
     {
+        $this->facebookEventScraper->save(
+            $this->facebookEventScraper->transformToModel(
+                $this->facebookEventScraper->fetch()
+            )
+        );
+        
+        return;
+        
+        
+        
         // Get all places
         $places = Place::all();
     
@@ -98,6 +108,59 @@ class FacebookEventScraper extends Command
         });
     }
     
+    /**
+     * Create and start a progress bar.
+     *
+     * @param int $max
+     * @return ProgressBar
+     */
+    private function startProgressBar($max = 0): ProgressBar
+    {
+        $pb = $this->output->createProgressBar($max);
+        $pb->start();
+    
+        $pb->setFormat("\n%message%\n %current%/%max% [%bar%] %percent:3s%%");
+        
+        return $pb;
+    }
+    
+    protected function fetchAllPlaceEvents(Place $place) : Collection
+    {
+        $events = $this->facebookEventScraper->fetchEvents($place, ['limit' => 2000]);
+        $paging = $events['paging'] ?? [];
+        
+        while ($this->hasNext($paging)) {
+            $events->merge($this->facebookEventScraper->fetchEvents($place, [
+                'limit' => 2000,
+                'after' => $this->getAfter($paging)
+            ]));
+        }
+        
+        return collect($events['data']);
+    }
+    
+    /**
+     * Check if next set of data exists in paginated results.
+     *
+     * @param array $paging
+     * @return bool
+     */
+    private function hasNext(array $paging)
+    {
+        return array_key_exists('next', $paging);
+    }
+    
+    /**
+     *
+     *
+     * @param array $paging
+     * @return string
+     */
+    private function getAfter(array $paging)
+    {
+        return $paging['after'];
+    }
+    
     private function saveEvents(Place $place, Collection $events)
     {
         $progressBar = $this->startProgressBar($events->count());
@@ -126,21 +189,6 @@ class FacebookEventScraper extends Command
         $progressBar->finish();
     }
     
-    protected function fetchAllPlaceEvents(Place $place) : Collection
-    {
-        $events = $this->facebookEventScraper->fetchEvents($place, ['limit' => 2000]);
-        $paging = $events['paging'] ?? [];
-        
-        while ($this->hasNext($paging)) {
-            $events->merge($this->facebookEventScraper->fetchEvents($place, [
-                'limit' => 2000,
-                'after' => $this->getAfter($paging)
-            ]));
-        }
-        
-        return collect($events['data']);
-    }
-    
     /**
      * Transform Facebook Event array to array that our Event model expects.
      *
@@ -161,43 +209,5 @@ class FacebookEventScraper extends Command
         }
         
         return $event;
-    }
-    
-    /**
-     * Create and start a progress bar.
-     *
-     * @param int $max
-     * @return ProgressBar
-     */
-    private function startProgressBar($max = 0): ProgressBar
-    {
-        $pb = $this->output->createProgressBar($max);
-        $pb->start();
-    
-        $pb->setFormat("\n%message%\n %current%/%max% [%bar%] %percent:3s%%");
-        
-        return $pb;
-    }
-    
-    /**
-     * Check if next set of data exists in paginated results.
-     *
-     * @param array $paging
-     * @return bool
-     */
-    private function hasNext(array $paging)
-    {
-        return array_key_exists('next', $paging);
-    }
-    
-    /**
-     *
-     *
-     * @param array $paging
-     * @return string
-     */
-    private function getAfter(array $paging)
-    {
-        return $paging['after'];
     }
 }

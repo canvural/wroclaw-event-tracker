@@ -129,4 +129,40 @@ class PlaceScraper extends FacebookScraper
         
         return $place;
     }
+    
+    /**
+     * Fetches data from the data source.
+     * And returns the raw data as an array.
+     *
+     * @param array $options
+     * @return Collection
+     */
+    public function fetch(array $options): Collection
+    {
+        // TODO: Implement fetch() method.
+    }
+    
+    /**
+     * Takes the raw data scraped from the data source,
+     * and transforms it to suitable model.
+     *
+     * @param Collection $rawData
+     * @return Collection
+     */
+    public function transformToModel(Collection $rawData): Collection
+    {
+        // TODO: Implement transformToModel() method.
+    }
+    
+    /**
+     *
+     *
+     * @param Collection $model
+     * @param array $options
+     * @return bool
+     */
+    public function save(Collection $model, $options = []): bool
+    {
+        // TODO: Implement save() method.
+    }
 }

@@ -40,7 +40,7 @@ $factory->define(App\Models\Place::class, function (Faker\Generator $faker) {
         'description' => $faker->paragraphs(5, true),
         'short_description' => $faker->paragraphs(1, true),
         'location' => json_encode($faker->address),
-        'rating' => $faker->randomFloat(),
+        'rating' => $faker->randomFloat(null, 0, 5.0),
         'phone' => $faker->phoneNumber,
         'website' => $faker->url
     ];
@@ -50,6 +50,7 @@ $factory->define(App\Models\Place::class, function (Faker\Generator $faker) {
 $factory->define(App\Models\Event::class, function (Faker\Generator $faker) {
     return [
         'category_id' => null,
+        'facebook_id' => $faker->randomNumber(5),
         'place_id' => function () {
             return factory(\App\Models\Place::class)->create()->id;
         },

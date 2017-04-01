@@ -17,7 +17,9 @@ class Event extends Model implements HasMediaConversions
         'name',
         'end_time',
         'start_time',
-        'extra_info'
+        'extra_info',
+        'place_id',
+        'category_id',
     ];
     
     /**
