@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
 class ViewEventListingTest extends TestCase
@@ -28,5 +29,18 @@ class ViewEventListingTest extends TestCase
         $response->assertSee('Tour de France');
         $response->assertSee('1 July 2017 12:00PM - 22 July 2017 0:00AM');
         $response->assertSee('Lorem ipsum lor amet..');
+    }
+    
+    /** @test */
+    function event_happening_this_week_will_be_shown_in_sidebar()
+    {
+        $eventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->toDateTimeString()]);
+        $secondEventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->toDateTimeString()]);
+        $eventNotHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->addWeek()->toDateTimeString()]);
+        
+        $this->get('/events/' . $eventHappeningThisWeek->id)
+            ->assertSee($eventHappeningThisWeek->name)
+            ->assertSee($secondEventHappeningThisWeek->name)
+            ->assertDontSee($eventNotHappeningThisWeek->name);
     }
 }
