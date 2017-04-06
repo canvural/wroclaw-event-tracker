@@ -4,7 +4,7 @@
             <a class="nav-item">
                 Wroclaw Events
             </a>
-            <a class="nav-item is-tab is-hidden-mobile is-active">Home</a>
+            <a href="{{ url('/')  }}" class="nav-item is-tab is-hidden-mobile">Home</a>
         </div>
         <span class="nav-toggle">
           <span></span>

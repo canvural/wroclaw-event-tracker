@@ -81,6 +81,10 @@ class Event extends Model implements HasMediaConversions
      */
     public function getFormattedEndTimeAttribute()
     {
+        if (is_null($this->end_time)) {
+            return '';
+        }
+        
         if ($this->end_time->isToday() || $this->end_time->isTomorrow()) {
             return $this->end_time->format('GA');
         }

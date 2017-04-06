@@ -34,9 +34,9 @@ class ViewEventListingTest extends TestCase
     /** @test */
     function event_happening_this_week_will_be_shown_in_sidebar()
     {
-        $eventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->toDateTimeString()]);
-        $secondEventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->toDateTimeString()]);
-        $eventNotHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->addWeek()->toDateTimeString()]);
+        $eventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()]);
+        $secondEventHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()]);
+        $eventNotHappeningThisWeek = factory(Event::class)->create(['start_time' => Carbon::now()->addWeek()]);
         
         $this->get('/events/' . $eventHappeningThisWeek->id)
             ->assertSee($eventHappeningThisWeek->name)

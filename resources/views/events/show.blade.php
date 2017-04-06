@@ -14,7 +14,7 @@
                             </h2>
                         </div>
                         <div class="is-pulled-right">
-                            <a href="https://www.facebook.com/events/{{ $event->facebook_id }}" rel="nofollow">
+                            <a href="https://www.facebook.com/events/{{ $event->facebook_id }}" target="_blank" rel="nofollow">
                                 See on Facebook
                             </a>
                         </div>
