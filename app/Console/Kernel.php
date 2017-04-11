@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\FacebookEventScraper;
 use App\Console\Commands\FacebookPlaceScraper;
+use App\Console\Commands\FetchEventImagesCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         FacebookEventScraper::class,
-        FacebookPlaceScraper::class
+        FacebookPlaceScraper::class,
+        FetchEventImagesCommand::class
     ];
     
     /**

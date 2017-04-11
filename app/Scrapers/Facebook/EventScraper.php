@@ -53,8 +53,10 @@ class EventScraper extends FacebookScraper
      */
     public function fetch(array $options = []): Collection
     {
-        return Place::chunk(200, function ($places) {
-            $places->mapWithKeys(function ($place) use ($options) {
+        $data = collect([]);
+        
+        Place::chunk(200, function ($places) use ($options, &$data) {
+            $data = $places->mapWithKeys(function ($place) use ($options) {
                 $events = $this->fb->fetchAll(
                     'GET',
                     $place->facebook_id . '/events',
@@ -66,6 +68,8 @@ class EventScraper extends FacebookScraper
                 return [$place->id => $events];
             });
         });
+        
+        return $data;
     }
     
     /**
