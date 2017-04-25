@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
-use Carbon\Carbon;
+use App\Models\Place;
 use Illuminate\Http\Request;
 
-class EventsController extends Controller
+class PlacesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,11 +14,11 @@ class EventsController extends Controller
      */
     public function index()
     {
-        $events = Event::with('place')->get();
+        $places = Place::latest()->take(10)->get();
         
-        return view('events.index', compact('events'));
+        return view('places.index', compact('places'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -29,7 +28,7 @@ class EventsController extends Controller
     {
         //
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -40,62 +39,49 @@ class EventsController extends Controller
     {
         //
     }
-    
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show(Place $place)
     {
-        return view('events.show', compact('event'));
+        return view('places.show', compact('place'));
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit(Place $place)
     {
         //
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(Request $request, Place $place)
     {
         //
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Event  $event
+     * @param  \App\Models\Place  $place
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy(Place $place)
     {
         //
-    }
-    
-    /**
-     * Get all events.
-     *
-     * @param Request $request
-     * @return mixed JSON for using in front-end.
-     */
-    public function all(Request $request)
-    {
-        $searchQuery = $request->input('q');
-        
-        return app(\App\Services\Event::class)->all($searchQuery);
     }
 }

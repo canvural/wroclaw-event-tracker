@@ -47,4 +47,14 @@ class Place extends Model
     {
         return $this->hasMany(Event::class);
     }
+    
+    /**
+     * Get a string path for the place.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/places/{$this->id}";
+    }
 }

@@ -125,4 +125,14 @@ class Event extends Model implements HasMediaConversions
             ->width(96)
             ->height(96);
     }
+    
+    /**
+     * Get a string path for the event.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/events/{$this->id}";
+    }
 }

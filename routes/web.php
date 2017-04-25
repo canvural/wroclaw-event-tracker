@@ -24,6 +24,7 @@ Route::get('auth/facebook', 'Auth\FacebookController@redirectToFacebook')->middl
 Route::get('auth/facebook/callback', 'Auth\FacebookController@handleCallback')->middleware('guest');
 
 Route::resource('events', 'EventsController');
+Route::resource('places', 'PlacesController');
 
 Route::get('/test', function () {
     \App\Models\Event::chunk(200, function ($events) {

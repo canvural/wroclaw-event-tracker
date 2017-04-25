@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Event;
+use App\Models\Place;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -11,6 +12,14 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class EventTest extends TestCase
 {
     use DatabaseMigrations;
+    
+    /** @test */
+    function it_has_a_place()
+    {
+        $event = factory(Event::class)->create();
+        
+        $this->assertInstanceOf(Place::class, $event->place);
+    }
     
     /**
       * @test
