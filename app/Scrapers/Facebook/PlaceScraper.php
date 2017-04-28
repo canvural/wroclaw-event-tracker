@@ -51,11 +51,9 @@ class PlaceScraper extends FacebookScraper
      */
     public function fetchPlaces(array $options = []): Collection
     {
-        $req = $this->fb->sendRequest('GET', 'search', array_merge(
+        return $this->fb->fetchAll('GET', 'search', array_merge(
             $this->getDefaultOptionsForFetchingPlaces(), $options
         ));
-        
-        return collect($req->getDecodedBody());
     }
     
     /**

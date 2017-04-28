@@ -13,7 +13,7 @@ class FacebookPlaceScraper extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:places';
+    protected $signature = 'scrape:facebook:places';
 
     /**
      * The console command description.
@@ -49,9 +49,9 @@ class FacebookPlaceScraper extends Command
         $progressBar = $this->startProgressBar();
         
         // Fetch places from Facebook API
-        $results = collect($this->facebookPlaceScraper->fetchPlaces([
+        $results = $this->facebookPlaceScraper->fetchPlaces([
             'limit' => 2000
-        ])['data']);
+        ]);
     
         $this->facebookPlaceScraper->savePlaces($results, function ($place) use($progressBar) {
             $progressBar->advance();
@@ -70,9 +70,8 @@ class FacebookPlaceScraper extends Command
      */
     private function startProgressBar($max = 0): ProgressBar
     {
-        $pb = $this->output->createProgressBar($max);
-        $pb->start();
-        
-        return $pb;
+        return tap($this->output->createProgressBar($max), function ($pb) {
+            $pb->start();
+        });
     }
 }

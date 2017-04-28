@@ -44,6 +44,18 @@ class Facebook extends BaseFacebook
     }
     
     /**
+     * Fetches all of the events for the given place.
+     *
+     * @param $facebookId
+     * @param $options
+     * @return \Illuminate\Support\Collection
+     */
+    public function fetchAllEventsForPlace($facebookId, $options)
+    {
+        return $this->fetchAll('GET', $facebookId . '/events', $options);
+    }
+    
+    /**
      * Determine if a response has paginated results.
      *
      * @param $response

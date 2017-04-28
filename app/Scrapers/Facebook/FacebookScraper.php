@@ -2,10 +2,9 @@
 
 namespace App\Scrapers\Facebook;
 
-use App\Scrapers\Scraper;
 use App\Services\Facebook;
 
-abstract class FacebookScraper implements Scraper
+abstract class FacebookScraper
 {
     /**
      * @var Facebook

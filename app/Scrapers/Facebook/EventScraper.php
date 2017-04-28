@@ -49,42 +49,32 @@ class EventScraper extends FacebookScraper
     ];
     
     /**
-     * @inheritdoc
+     * @param $placeId
+     * @param array $options
+     * @return Collection
      */
-    public function fetch(array $options = []): Collection
+    public function fetch($placeId, array $options = []): Collection
     {
-        $data = collect([]);
+        $events = $this->fb->fetchAllEventsForPlace($placeId, $this->getOptions($options));
+
+        usleep(700);
         
-        Place::chunk(200, function ($places) use ($options, &$data) {
-            $data = $places->mapWithKeys(function ($place) use ($options) {
-                $events = $this->fb->fetchAll(
-                    'GET',
-                    $place->facebook_id . '/events',
-                    $this->getOptions($options)
-                );
-    
-                usleep(700);
-    
-                return [$place->id => $events];
-            });
-        });
-        
-        return $data;
+        return $events;
     }
     
     /**
-     * @inheritdoc
+     * @param $placeId
+     * @param Collection $rawEvents
+     * @return Collection
      */
-    public function transformToModel(Collection $rawData): Collection
+    public function transformToModel($placeId, Collection $rawEvents): Collection
     {
-        return $rawData->flatMap(function ($events, $placeId) {
-            return $events->map(function ($eventData) use($placeId) {
-                $eventData['place_id'] = $placeId;
-                
-                return Event::firstOrNew([
-                    'facebook_id' => $eventData['id']
-                ], $this->transform($eventData));
-            });
+        return $rawEvents->map(function ($eventData) use($placeId) {
+            $eventData['place_id'] = $placeId;
+            
+            return Event::firstOrNew([
+                'facebook_id' => $eventData['id']
+            ], $this->transform($eventData));
         });
     }
     
@@ -93,8 +83,8 @@ class EventScraper extends FacebookScraper
      */
     public function save(Collection $models, $options = []): bool
     {
-        $models->filter(function ($event) {
-            return ! $event->exists;
+        $models->reject(function ($event) {
+            return $event->exists;
         })->each(function ($model) use ($options) {
             try {
                 $model->saveOrFail();
