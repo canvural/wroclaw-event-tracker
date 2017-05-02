@@ -39,7 +39,11 @@ $factory->define(App\Models\Place::class, function (Faker\Generator $faker) {
         'name' => $faker->company,
         'description' => $faker->paragraphs(5, true),
         'short_description' => $faker->paragraphs(1, true),
-        'location' => json_encode($faker->address),
+        'location' => [
+            'city' => $faker->city,
+            'street' => $faker->streetName,
+            'zip' => $faker->postcode
+        ],
         'rating' => $faker->randomFloat(null, 0, 5.0),
         'phone' => $faker->phoneNumber,
         'website' => $faker->url

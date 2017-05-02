@@ -16,7 +16,7 @@
                 <a class="nav-item is-tab" href="{{ url('/login') }}">Login</a>
                 <a class="nav-item is-tab" href="{{ url('/register') }}">Register</a>
             @else
-                <a class="nav-item is-tab" href="#">Hi, {{ $user->name }}</a>
+                <a href="{{ url('/profiles/' . $user->name) }}" class="nav-item is-tab" href="#">Hi, {{ $user->name }}</a>
                 <a class="nav-item is-tab" href="{{ url('/logout') }}"
                    onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">

@@ -3,8 +3,8 @@
         <div class="container">
             <div class="columns is-mobile">
                 <div class="column is-9">
-                    <figure class="image">
-                        <img src="{{$event->getFirstMediaUrl()}}" alt="{{$event->name}}">
+                    <figure class="image is-2by1">
+                        <img src="{{$event->getFirstMediaUrl('cover')}}" alt="{{$event->name}}">
                     </figure>
                     <div class="box columns">
                         <div class="column is-10">
@@ -17,6 +17,23 @@
                             <a href="https://www.facebook.com/events/{{ $event->facebook_id }}" target="_blank" rel="nofollow">
                                 See on Facebook
                             </a>
+                            <div>
+                                <form method="POST" action="/events/{{ $event->id }}/attend">
+                                    {{ csrf_field() }}
+
+                                    @if ($isLoggedIn)
+                                    <button type="submit" class="button is-info" {{$user->isAttending($event) ? 'disabled' : ''}}>
+                                        Attend to event
+                                    </button>
+                                    @endif
+
+                                    @if ($event->isInFuture())
+                                        <p>{{ $event->attendeeCount }} people going to this event!</p>
+                                    @else
+                                        <p>{{ $event->attendeeCount }} people went to this event!</p>
+                                    @endif
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <div class="box">{!! nl2br(e($event->description)) !!}</div>

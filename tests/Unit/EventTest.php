@@ -85,4 +85,16 @@ class EventTest extends TestCase
         $this->assertEquals('12PM', $event->formatted_end_time);
         $this->assertEquals('12PM', $eventTomorrow->formatted_end_time);
     }
+    
+    /** @test */
+    function an_event_has_attendee_count()
+    {
+        $this->signIn();
+        
+        $event = create(Event::class);
+        
+        $event->attendees()->attach(auth()->id());
+        
+        $this->assertEquals(1, $event->attendeeCount);
+    }
 }

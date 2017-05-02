@@ -23,5 +23,8 @@ Route::get('/map', 'HomeController@map');
 Route::get('auth/facebook', 'Auth\FacebookController@redirectToFacebook')->middleware('guest');
 Route::get('auth/facebook/callback', 'Auth\FacebookController@handleCallback')->middleware('guest');
 
+Route::post('/events/{event}/attend', 'EventAttendingController@store');
 Route::resource('events', 'EventsController');
 Route::resource('places', 'PlacesController');
+
+Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');

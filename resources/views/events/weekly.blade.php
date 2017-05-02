@@ -1,4 +1,4 @@
-@inject('weeklyEvents', 'App\Services\Event')
+@inject('eventService', 'App\Services\Event')
 <div class="card">
     <header class="card-header">
         <p class="card-header-title">
@@ -12,11 +12,11 @@
     </header>
     <div class="card-content">
         <div class="content">
-            @foreach($weeklyEvents->weekly() as $e)
+            @foreach($eventService->weekly() as $e)
                 <article class="media">
                     <figure class="media-left">
                         <p class="image is-32x32">
-                            <img src="{{$e->getFirstMediaUrl('default', 'thumbnail')}}">
+                            <img src="{{$e->getFirstMediaUrl('cover', 'thumbnail')}}">
                         </p>
                     </figure>
                     <div class="media-content">

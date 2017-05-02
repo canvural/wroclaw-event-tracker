@@ -56,6 +56,11 @@ class Event extends Model implements HasMediaConversions
         return $this->belongsTo(EventCategory::class);
     }
     
+    public function attendees()
+    {
+        return $this->belongsToMany(User::class);
+    }
+    
     /**
      * Get human readable event start time.
      *
@@ -93,6 +98,16 @@ class Event extends Model implements HasMediaConversions
     }
     
     /**
+     * Get the number of attending users for the event.
+     *
+     * @return integer
+     */
+    public function getAttendeeCountAttribute()
+    {
+        return $this->attendees->count();
+    }
+    
+    /**
      * Query scope to search event name and description
      * for the given search query.
      *
@@ -121,6 +136,19 @@ class Event extends Model implements HasMediaConversions
             ->width(96)
             ->height(96)
             ->performOnCollections('cover');
+    
+        
+            
+    }
+    
+    /**
+     * Determines if event is happened.
+     *
+     * @return boolean
+     */
+    public function isInFuture()
+    {
+        return $this->end_time->isFuture();
     }
     
     /**

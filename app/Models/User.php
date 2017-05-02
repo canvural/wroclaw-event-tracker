@@ -26,4 +26,34 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token', 'fb_token',
     ];
+    
+    /**
+     * Get the route key name for Laravel.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+    
+    /**
+     * An user can attend to many events.
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function events()
+    {
+        return $this->belongsToMany(Event::class);
+    }
+    
+    /**
+     * Determine if user attended the event.
+     *
+     * @param Event $event
+     * @return bool
+     */
+    public function isAttending(Event $event)
+    {
+        return !! $this->events()->where('event_id', $event->id)->count();
+    }
 }
