@@ -25,21 +25,3 @@ Route::get('auth/facebook/callback', 'Auth\FacebookController@handleCallback')->
 
 Route::resource('events', 'EventsController');
 Route::resource('places', 'PlacesController');
-
-Route::get('/test', function () {
-    \App\Models\Event::chunk(200, function ($events) {
-        $events->filter(function ($event) {
-            return !$event->hasMedia();
-        })->filter(function ($event) {
-            return !is_null($event->extra_info) && (array_key_exists('cover', $event->extra_info)
-                && array_key_exists('source', $event->extra_info['cover']));
-        })->each(function($event) {
-            try {
-                $event->addMediaFromUrl($event->extra_info['cover']['source']);
-            } catch (UnreachableUrl $e) {
-                echo $event->id . "<br>";
-            }
-        });
-    });
-    
-});
