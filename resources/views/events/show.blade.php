@@ -6,14 +6,14 @@
                     <figure class="image">
                         <img src="{{$event->getFirstMediaUrl()}}" alt="{{$event->name}}">
                     </figure>
-                    <div class="box is-clearfix">
-                        <div class="is-pulled-left">
-                            <h3 class="title is-3">{{$event->name}}</h3>
+                    <div class="box columns">
+                        <div class="column is-10">
+                            <h3 class="title is-3">{{$event->name}}</h3> by <a href="{{$event->place->path()}}">{{$event->place->name}}</a>
                             <h2 class="subtitle">
                                 {{$event->formatted_start_time}} - {{$event->formatted_end_time}}
                             </h2>
                         </div>
-                        <div class="is-pulled-right">
+                        <div class="column is-2">
                             <a href="https://www.facebook.com/events/{{ $event->facebook_id }}" target="_blank" rel="nofollow">
                                 See on Facebook
                             </a>

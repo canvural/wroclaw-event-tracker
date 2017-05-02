@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Event;
+use App\Models\Place;
 use App\Scrapers\Facebook\EventScraper;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Collection;
@@ -15,13 +16,15 @@ class FacebookEventScraperTest extends TestCase
     /** @test */
     function it_will_fetch_the_existing_model_rather_than_creating_new_while_transforming()
     {
+        $place = factory(Place::class)->create();
+        
         factory(Event::class)->create(['facebook_id' => 123]);
         factory(Event::class)->create(['facebook_id' => 321]);
     
         $eventCollection = $this->app->make(EventScraper::class)
-            ->transformToModel(collect([
-                collect([1 => ['id' => 123, 'name' => 'event']]),
-                collect([2 => ['id' => 321, 'name' => 'Awesome event']]),
+            ->transformToModel($place->id, collect([
+                ['id' => 123, 'name' => 'event'],
+                ['id' => 321, 'name' => 'Awesome event'],
             ]));
     
         $this->assertInstanceOf(Collection::class, $eventCollection);
@@ -35,8 +38,10 @@ class FacebookEventScraperTest extends TestCase
     /** @test */
     function it_can_transform_collection_of_raw_data_to_collection_of_event_models()
     {
+        $place = factory(Place::class)->create();
+        
         $eventData = [
-            collect([1 => [
+            [
                 'id' => '12345',
                 'name' => 'This is a cool event',
                 'description' => 'This is a really cool event. You should not miss it!!',
@@ -44,8 +49,8 @@ class FacebookEventScraperTest extends TestCase
                 'end_time' => '12/03/2017',
                 'interested_count' => 10,
                 'maybe_count' => 1,
-            ]]),
-            collect([2 => [
+            ],
+            [
                 'id' => '123456789',
                 'name' => 'This is another cool event',
                 'description' => 'This is a really cool event. You should not miss it too!!',
@@ -53,11 +58,11 @@ class FacebookEventScraperTest extends TestCase
                 'end_time' => '12/05/2018',
                 'interested_count' => 10,
                 'maybe_count' => 1,
-            ]])
+            ]
         ];
         
         $eventCollection = $this->app->make(EventScraper::class)
-                            ->transformToModel(collect($eventData));
+                            ->transformToModel($place->id, collect($eventData));
         
         $this->assertInstanceOf(Collection::class, $eventCollection);
         $this->assertEquals(2, $eventCollection->count());

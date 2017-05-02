@@ -12,6 +12,11 @@ class ViewPlacesTest extends TestCase
 {
     use DatabaseMigrations;
     
+    /**
+     * @var Place
+     */
+    private $place;
+    
     public function setUp()
     {
         parent::setUp();

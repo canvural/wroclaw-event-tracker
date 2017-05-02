@@ -55,15 +55,15 @@ class FetchEventImagesCommand extends Command
     
             /** @var Event $event */
             foreach ($events as $event) {
-                $response = $this->fb->sendRequest('GET', $event->facebook_id, ['fields' => 'cover'])->getDecodedBody();
-                $url = data_get($response, 'cover.source') ?? '';
-                
                 try {
+                    $response = $this->fb->sendRequest('GET', $event->facebook_id, ['fields' => 'cover'])->getDecodedBody();
+                    $url = data_get($response, 'cover.source') ?? '';
+                    
                     $event->addMediaFromUrl($url)->toMediaCollection('cover');
                 } catch (UnreachableUrl $e) {
                     $this->output->error($event->id . " returned " . print_r($response));
                 } catch (FacebookResponseException $exception) {
-                    $this->output->error("Event with facebook id {$event->id}, does not exists");
+                    $this->output->error("Event with facebook id {$event->facebook_id}, does not exists");
                 } catch (\Exception $e) {
                     $this->output->error("Huge error!");
                 }
