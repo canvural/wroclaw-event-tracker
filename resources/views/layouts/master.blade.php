@@ -19,7 +19,16 @@
     @include('layouts.partials.nav')
 
     <div id="app">
-        {{ $slot }}
+        <div class="container">
+            <div class="columns is-mobile">
+                <div class="column is-9">
+                    {{ $slot }}
+                </div>
+                <div class="column is-3" id="events-happening-this-week">
+                    @include('events.weekly')
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->
