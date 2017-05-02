@@ -3,7 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Models\Event;
+use App\Services\Facebook;
+use Facebook\Exceptions\FacebookResponseException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\UnreachableUrl;
 
 class FetchEventImagesCommand extends Command
@@ -20,16 +23,22 @@ class FetchEventImagesCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
-
+    protected $description = 'Fetches images for the events that does not have an image.';
+    
+    /**
+     * @var Facebook
+     */
+    private $fb;
+    
     /**
      * Create a new command instance.
      *
-     * @return void
+     * @param Facebook $fb
      */
-    public function __construct()
+    public function __construct(Facebook $fb)
     {
         parent::__construct();
+        $this->fb = $fb;
     }
 
     /**
@@ -39,19 +48,26 @@ class FetchEventImagesCommand extends Command
      */
     public function handle()
     {
-        Event::chunk(200, function ($events) {
-            $events->filter(function ($event) {
-                return !$event->hasMedia();
-            })->filter(function ($event) {
-                return !is_null($event->extra_info) && (array_key_exists('cover', $event->extra_info)
-                        && array_key_exists('source', $event->extra_info['cover']));
-            })->each(function(Event $event) {
-                try {
-                    $event->addMediaFromUrl($event->extra_info['cover']['source'])->toMediaCollection();
-                } catch (UnreachableUrl $e) {
-                    $this->output->error($event->id . " unreachable url " . $event->extra_info['cover']['source']);
-                }
+        Event::chunk(200, function (Collection $events) {
+            $events = $events->reject(function (Event $event) {
+                return $event->hasMedia('cover');
             });
+    
+            /** @var Event $event */
+            foreach ($events as $event) {
+                $response = $this->fb->sendRequest('GET', $event->facebook_id, ['fields' => 'cover'])->getDecodedBody();
+                $url = data_get($response, 'cover.source') ?? '';
+                
+                try {
+                    $event->addMediaFromUrl($url)->toMediaCollection('cover');
+                } catch (UnreachableUrl $e) {
+                    $this->output->error($event->id . " returned " . print_r($response));
+                } catch (FacebookResponseException $exception) {
+                    $this->output->error("Event with facebook id {$event->id}, does not exists");
+                } catch (\Exception $e) {
+                    $this->output->error("Huge error!");
+                }
+            }
         });
         
         return true;

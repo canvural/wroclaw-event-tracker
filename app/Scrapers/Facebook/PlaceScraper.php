@@ -21,6 +21,7 @@ class PlaceScraper extends FacebookScraper
         'category',
         'category_list',
         'checkins',
+        'cover',
         'culinary_team',
         'description',
         'food_styles',

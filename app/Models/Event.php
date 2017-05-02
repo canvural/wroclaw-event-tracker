@@ -117,13 +117,10 @@ class Event extends Model implements HasMediaConversions
      */
     public function registerMediaConversions()
     {
-        $this->addMediaConversion('banner')
-            ->width(320)
-            ->height(160);
-    
         $this->addMediaConversion('thumbnail')
             ->width(96)
-            ->height(96);
+            ->height(96)
+            ->performOnCollections('cover');
     }
     
     /**
@@ -134,5 +131,13 @@ class Event extends Model implements HasMediaConversions
     public function path()
     {
         return "/events/{$this->id}";
+    }
+    
+    /**
+     * @return string|null
+     */
+    public function getCoverPictureUrl()
+    {
+        return $this->extra_info['cover']['source'] ?? null;
     }
 }
