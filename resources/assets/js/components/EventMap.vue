@@ -1,24 +1,26 @@
 <template>
     <div id="event-map">
         <gmap-map
-                :center="{lat:51.107885, lng:17.038538}"
-                map-type-id="terrain"
-                :zoom="15"
-                style="height: 500px"
+            :center="{lat:51.107885, lng:17.038538}"
+            map-type-id="terrain"
+            :zoom="15"
+            style="height: 500px"
         >
             <gmap-marker
-                    v-for="m in markers"
-                    :position=makeMarkerLocation(m[0])
-                    :clickable="true"
-                    :animation=2
-                    @click="markerClicked(m)"
+                v-for="m in markers"
+                :key="m[0].id"
+                :position=makeMarkerLocation(m[0])
+                :clickable="true"
+                :animation=2
+                @click="markerClicked(m)"
             >
                 <map-event-info-window
-                        v-for="event in m"
-                        :opened="event.id == currentOpenEventId"
-                        :event=event
-                        :hasMultipleEvents="m.length > 1"
-                        v-on:nextEventClicked="nextEventClicked(m)"
+                    v-for="event in m"
+                    :key="m[0].id"
+                    :opened="event.id == currentOpenEventId"
+                    :event=event
+                    :hasMultipleEvents="m.length > 1"
+                    v-on:nextEventClicked="nextEventClicked(m)"
                 >
 
                 </map-event-info-window>
