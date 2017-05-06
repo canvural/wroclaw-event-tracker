@@ -16,7 +16,11 @@
                 <article class="media">
                     <figure class="media-left">
                         <p class="image is-32x32">
-                            <img src="{{$e->getFirstMediaUrl('cover', 'thumbnail')}}">
+                            @if(!$e->media->isEmpty())
+                            <img src="{{$e->media->first()->getUrl('thumbnail')}}">
+                            @else
+                            <img src="" alt="">
+                            @endif
                         </p>
                     </figure>
                     <div class="media-content">

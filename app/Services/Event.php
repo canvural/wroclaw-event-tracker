@@ -23,7 +23,7 @@ class Event
     
     public function weekly()
     {
-        return EventModel::whereBetween('start_time', [
+        return EventModel::with('media')->whereBetween('start_time', [
             Carbon::today(),
             Carbon::today()->endOfWeek()
         ])->inRandomOrder()->limit('5')->get();

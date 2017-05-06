@@ -48,6 +48,10 @@ class PlacesController extends Controller
      */
     public function show(Place $place)
     {
+        $place->load(['events' => function ($query) {
+            $query->limit(3);
+        }, 'events.media']);
+        
         return view('places.show', compact('place'));
     }
 

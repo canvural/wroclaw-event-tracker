@@ -18,15 +18,17 @@
         <div class="columns is-mobile is-multiline">
             @foreach($place->events as $event)
                 <div class=" column is-3 card">
+                    @if(!$event->media->isEmpty())
+                        <div class="card-image">
+                            <figure class="image is-48x48">
+                                <img src="{{ $event->media->first()->getUrl('thumbnail') }}">
+                            </figure>
+                        </div>
+                    @endif
                     <div class="card-header">
                         <div class="card-header-title">
                             <a href="{{ $event->path() }}">{{ $event->name }}</a>
                         </div>
-                    </div>
-                    <div class="card-image">
-                        <figure class="image is-48x48">
-                            <img src="{{ $event->getFirstMediaUrl('cover', 'thumbnail') }}">
-                        </figure>
                     </div>
                 </div>
             @endforeach
