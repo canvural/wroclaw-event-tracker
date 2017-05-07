@@ -17,6 +17,8 @@ class CreateEventUserTable extends Migration
             $table->unsignedInteger('event_id');
             $table->unsignedInteger('user_id');
             $table->timestamps();
+            
+            $table->unique(['event_id', 'user_id']);
         });
     }
 

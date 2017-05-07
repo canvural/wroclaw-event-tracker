@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use ScoutEngines\Elasticsearch\ElasticSearchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 
 class Event extends Model implements HasMediaConversions
 {
-    use HasMediaTrait;
+    use HasMediaTrait, ElasticSearchable;
     
     protected $fillable = [
         'facebook_id',
@@ -167,5 +167,60 @@ class Event extends Model implements HasMediaConversions
     public function getCoverPictureUrl()
     {
         return $this->extra_info['cover']['source'] ?? null;
+    }
+    
+    /**
+     * Array format of the event, that will be indexed by Laravel Scout.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $data = $this->toArray();
+        
+        if ($data['extra_info'] && array_key_exists('id', $data['extra_info'])) {
+            unset($data['extra_info']['id']);
+        }
+        
+        $data['location'] = [
+            $this->place->location['longitude'],
+            $this->place->location['latitude'],
+        ];
+        
+        return $data;
+    }
+    
+    /**
+     * Elasticsearch specific mappings for the event.
+     *
+     * @return array
+     */
+    public static function mapping()
+    {
+        return [
+            'id' => ['type' => 'integer'],
+            'name' => ['type' => 'text'],
+            'end_time' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+            'start_time' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+            'created_at' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+            'updated_at' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+            'description' => ['type' => 'text'],
+            'facebook_id' => ['type' => 'long'],
+            'place_id' => ['type' => 'integer'],
+            'location' => ['type' => 'geo_point'],
+            'category_id' => ['type' => 'integer'],
+        ];
     }
 }

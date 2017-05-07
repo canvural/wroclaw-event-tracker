@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use ScoutEngines\Elasticsearch\ElasticSearchable;
 
 class Place extends Model
 {
+    use ElasticSearchable;
+    
     protected $fillable = [
         'facebook_id',
         'short_description',
@@ -56,5 +59,55 @@ class Place extends Model
     public function path()
     {
         return "/places/{$this->id}";
+    }
+    
+    /**
+     * Array format of the place, that will be indexed by Laravel Scout.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $data = $this->toArray();
+        
+        if ($data['extra_info'] && array_key_exists('id', $data['extra_info'])) {
+            unset($data['extra_info']['id']);
+        }
+        
+        $data['location'] = [
+            $this->location['longitude'],
+            $this->location['latitude'],
+        ];
+        
+        return $data;
+    }
+    
+    /**
+     * Elasticsearch specific mappings for the event.
+     *
+     * @return array
+     */
+    public static function mapping()
+    {
+        return [
+            'id' => ['type' => 'integer'],
+            'facebook_id' => ['type' => 'long'],
+            'category_id' => ['type' => 'integer'],
+            'name' => ['type' => 'text'],
+            'description' => ['type' => 'text'],
+            'short_description' => ['type' => 'text'],
+            'rating' => ['type' => 'float'],
+            'phone' => ['type' => 'text'],
+            'website' => ['type' => 'text'],
+            'location' => ['type' => 'geo_point'],
+            'created_at' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+            'updated_at' => [
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
+            ],
+        ];
     }
 }

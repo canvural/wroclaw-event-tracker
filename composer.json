@@ -4,6 +4,12 @@
     "keywords": ["wroclaw", "poland", "event", "concert"],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/thomasjsn/laravel-scout-elastic"
+        }
+    ],
     "require": {
         "php": ">=7.0",
         "barryvdh/laravel-debugbar": "dev-master",
@@ -13,7 +19,9 @@
         "laravel/framework": "5.4.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
-        "spatie/laravel-medialibrary": "~5.0"
+        "laravel/scout": "~3.0",
+        "spatie/laravel-medialibrary": "~5.0",
+        "tamayo/laravel-scout-elastic": "dev-master"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.2",
