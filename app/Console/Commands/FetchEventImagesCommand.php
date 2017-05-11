@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Event;
 use App\Services\Facebook;
+use Carbon\Carbon;
 use Facebook\Exceptions\FacebookResponseException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -48,7 +49,10 @@ class FetchEventImagesCommand extends Command
      */
     public function handle()
     {
-        Event::chunk(200, function (Collection $events) {
+        Event::whereBetween('created_at', [
+            Carbon::now()->subDay(),
+            Carbon::now()
+        ])->chunk(200, function (Collection $events) {
             $events = $events->reject(function (Event $event) {
                 return $event->hasMedia('cover');
             });
