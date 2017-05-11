@@ -181,11 +181,15 @@ class Event extends Model implements HasMediaConversions
         if ($data['extra_info'] && array_key_exists('id', $data['extra_info'])) {
             unset($data['extra_info']['id']);
         }
-        
-        $data['location'] = [
-            $this->place->location['longitude'],
-            $this->place->location['latitude'],
-        ];
+    
+        if (array_key_exists('longitude', $this->place->location)
+            && array_key_exists('latitude', $this->place->location)
+        ) {
+            $data['location'] = [
+                $this->place->location['longitude'],
+                $this->place->location['latitude'],
+            ];
+        }
         
         return $data;
     }

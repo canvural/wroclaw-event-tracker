@@ -74,6 +74,9 @@ class Place extends Model
             unset($data['extra_info']['id']);
         }
         
+        if (array_key_exists('longitude', $this->location)
+            && array_key_exists('latitude', $this->location)
+        )
         $data['location'] = [
             $this->location['longitude'],
             $this->location['latitude'],

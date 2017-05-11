@@ -21,7 +21,7 @@ class FacebookEventScraper extends Command
      *
      * @var string
      */
-    protected $signature = 'scrape:facebook:events';
+    protected $signature = 'scrape:facebook:events {placeId?}';
     
     /**
      * The console command description.
@@ -56,9 +56,15 @@ class FacebookEventScraper extends Command
      */
     public function handle()
     {
-        $progressBar = $this->startProgressBar(Place::count());
+        if ($placeId = $this->argument('placeId')) {
+            $places = [Place::findOrFail($placeId)];
+        } else {
+            $places = Place::select(['id', 'name','facebook_id'])->cursor();
+        }
         
-        foreach (Place::select(['id', 'name','facebook_id'])->cursor() as $place) {
+        $progressBar = $this->startProgressBar(count($places));
+        
+        foreach ($places as $place) {
             $progressBar->setMessage("Fetching events for " . $place['name']);
             $events = $this->facebookEventScraper->fetch($place['facebook_id']);
     

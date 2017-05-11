@@ -41,6 +41,22 @@ class PlaceScraper extends FacebookScraper
     ];
     
     /**
+     * Fetches info about one place, with the given id.
+     *
+     * @param string $id Facebook place id
+     * @param array $options
+     * @return Collection
+     */
+    public function fetchPlace($id, array $options = []): Collection
+    {
+        $response = $this->fb->sendRequest('GET', $id, array_merge(
+            $this->getDefaultOptionsForFetchingPlaces(), $options
+        ));
+        
+        return collect([$response->getDecodedBody()]);
+    }
+    
+    /**
      * Fetches all Facebook Places in Wroclaw from the API.
      *
      * It can take some options like limit or distance.
