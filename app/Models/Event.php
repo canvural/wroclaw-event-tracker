@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Filters\EventsFilters;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use ScoutEngines\Elasticsearch\ElasticSearchable;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
@@ -159,6 +161,16 @@ class Event extends Model implements HasMediaConversions
     public function path()
     {
         return "/events/{$this->id}";
+    }
+    
+    /**
+     * @param Builder $query
+     * @param EventsFilters $filters
+     * @return Builder
+     */
+    public function scopeFilter($query, EventsFilters $filters)
+    {
+        return $filters->apply($query);
     }
     
     /**

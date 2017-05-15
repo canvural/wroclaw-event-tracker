@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\EventsFilters;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -11,11 +12,12 @@ class EventsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param EventsFilters $filters
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(EventsFilters $filters)
     {
-        $events = Event::with('place')->get();
+        $events = Event::with('place')->latest('start_time')->filter($filters)->get();
         
         return view('events.index', compact('events'));
     }
