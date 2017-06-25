@@ -1,13 +1,13 @@
 @component('layouts.master')
-    <section class="section" id="events">
-        <figure class="image is-2by1">
-            <img src="{{$event->getFirstMediaUrl('cover')}}" alt="{{$event->name}}">
-        </figure>
-        <div class="box columns">
-            <div class="column is-10">
-                <h3 class="title is-3">
+    <section id="events" class="mw8 center shadow-2">
+        <div style="height: 400px;">
+            <img src="{{$event->getFirstMediaUrl('cover')}}" class="w-100 h-100" alt="{{$event->name}}">
+        </div>
+        <div class="ph3">
+            <div class="br bb bl">
+                <h2 class="f2 lh-copy ma0">
                     {{$event->name}}
-                </h3> by <a href="{{$event->place->path()}}">{{$event->place->name}}</a>
+                </h2> by <a href="{{$event->place->path()}}">{{$event->place->name}}</a>
                 <h2 class="subtitle">
                     {{$event->formatted_start_time}} - {{$event->formatted_end_time}}
                 </h2>

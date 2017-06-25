@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import axios from 'axios';
-import * as VueGoogleMaps from 'vue2-google-maps'
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
@@ -21,13 +20,6 @@ window.axios = axios;
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
 };
-
-Vue.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyAtonO5vGgoAsGOyBfPGsT3hsVyqh_twJU'
-        // libraries: 'places', //// If you need to use place input
-    }
-});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

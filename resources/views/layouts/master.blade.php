@@ -8,28 +8,20 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Wroclaw Event Tracker') }}</title>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="w-100 sans-serif">
     @include('layouts.partials.nav')
+    <main class="center ph4">
 
-    <div id="app">
-        <div class="container">
-            <div class="columns is-mobile">
-                <div class="column is-9">
-                    {{ $slot }}
-                </div>
-                <div class="column is-3" id="events-happening-this-week">
-                    @include('events.weekly')
-                </div>
-            </div>
+        <div id="app">
+            {{ $slot }}
         </div>
-    </div>
+    </main>
 
     <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
